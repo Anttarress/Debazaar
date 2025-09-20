@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.telegram-card {
+    @apply bg-white dark:bg-telegram-secondary rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700;
+}
+
+.telegram-button {
+    @apply bg-telegram-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors;
+}
+
+.telegram-input {
+    @apply w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-telegram-secondary text-gray-900 dark:text-white focus:ring-2 focus:ring-telegram-blue focus:border-transparent;
+}
+
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}

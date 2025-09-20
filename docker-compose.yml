@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: crypto_marketplace_db
+    environment:
+      POSTGRES_DB: crypto_marketplace
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - marketplace_network
+
+  web:
+    build: ./backend
+    container_name: crypto_marketplace_api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres123@db:5432/crypto_marketplace
+      - DEBUG=1
+    networks:
+      - marketplace_network
+
+  frontend:
+    build: ./frontend
+    container_name: crypto_marketplace_frontend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - web
+    networks:
+      - marketplace_network
+
+volumes:
+  postgres_data:
+
+networks:
+  marketplace_network:
+    driver: bridge
+
