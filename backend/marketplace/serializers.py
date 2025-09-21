@@ -135,7 +135,4 @@ class DepositSerializer(serializers.Serializer):
 
 class UploadFileSerializer(serializers.Serializer):
     file = serializers.ImageField()
-
-
-
-
+    
