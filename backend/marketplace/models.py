@@ -1,5 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
+
+class CategoryChoices(models.TextChoices):
+    ELECTRONICS = 'electronics', _('Electronics')
+    CLOTHING = 'clothing', _('Clothing & Fashion')
+    HOME_GARDEN = 'home_garden', _('Home & Garden')
+    SPORTS = 'sports', _('Sports & Outdoors')
+    BOOKS = 'books', _('Books & Media')
+    HEALTH = 'health', _('Health & Beauty')
+    TOYS = 'toys', _('Toys & Games')
+    AUTOMOTIVE = 'automotive', _('Automotive')
+    ART = 'art', _('Art & Collectibles')
+    DIGITAL = 'digital', _('Digital Products')
+    SERVICES = 'services', _('Services')
+    OTHER = 'other', _('Other')
 
 
 class UserProfile(models.Model):
@@ -39,7 +55,7 @@ class Listing(models.Model):
     metadata_cid = models.CharField(max_length=100, blank=True, null=True)
     image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=20, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

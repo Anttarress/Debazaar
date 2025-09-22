@@ -66,14 +66,21 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         <option value="BTC">BTC</option>
                     </select>
 
-                    <input
-                        type="text"
-                        name="category"
-                        placeholder="Category"
-                        value={formData.category}
-                        onChange={handleChange}
-                        required
-                    />
+                    <select name="category" value={formData.category} onChange={handleChange} required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing & Fashion</option>
+                        <option value="home_garden">Home & Garden</option>
+                        <option value="sports">Sports & Outdoors</option>
+                        <option value="books">Books & Media</option>
+                        <option value="health">Health & Beauty</option>
+                        <option value="toys">Toys & Games</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="art">Art & Collectibles</option>
+                        <option value="digital">Digital Products</option>
+                        <option value="services">Services</option>
+                        <option value="other">Other</option>
+                    </select>
 
                     <input
                         type="url"
