@@ -1,10 +1,14 @@
 
-const API_BASE = process.env.REACT_APP_API_URL || 'https://debazaar.click/api';
+const API_BASE = 'https://debazaar.click/api';
 
 export const api = {
     // Get all listings
     getListings: async () => {
-        const response = await fetch(`${API_BASE}/listings/`);
+        console.log('here in this function');
+        const url = `${API_BASE}/listings/`;
+        console.log('url: ', url);
+        const response = await fetch(url);
+        console.log(response);
         if (!response.ok) throw new Error('Failed to fetch listings');
         return response.json();
     },

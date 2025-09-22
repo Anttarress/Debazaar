@@ -7,6 +7,7 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         price: '',
         currency: 'USDT',
         category: '',
+        image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
         seller_id: 1 // Mock seller ID
     });

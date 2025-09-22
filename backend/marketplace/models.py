@@ -37,7 +37,7 @@ class Listing(models.Model):
     token_address = models.CharField(max_length=42)
     file_path = models.CharField(max_length=500, blank=True, null=True)
     metadata_cid = models.CharField(max_length=100, blank=True, null=True)
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=50)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')

@@ -62,7 +62,9 @@ function App() {
     const loadProducts = async () => {
         try {
             setLoading(true);
+            console.log('here in this f3 - HOT RELOAD TEST');
             const data = await api.getListings();
+            console.log('data: ', data);
             setProducts(data.listings || []);
         } catch (err) {
             console.error('Error loading products:', err);
@@ -99,7 +101,7 @@ function App() {
         <div className="app">
             <div className="header">
                 <div className="header-left">
-                    <h1>DBazaar</h1>
+                    <h1>DeBazaar</h1>
                     {telegramUser && (
                         <div className="user-info">
                             Hi {telegramUser.first_name}!
@@ -110,7 +112,7 @@ function App() {
                     <div className="search-container">
                         <input
                             type="text"
-                            placeholder="Search for anything"
+                            placeholder="Searching"
                             className="search-input"
                         />
                         <button className="search-btn">Search</button>

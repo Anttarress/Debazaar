@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:15
+    container_name: crypto_marketplace_db
     environment:
       POSTGRES_DB: crypto_marketplace
       POSTGRES_USER: postgres
@@ -14,6 +15,7 @@ services:
 
   web:
     build: ./backend
+    container_name: crypto_marketplace_api
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/app
@@ -29,10 +31,23 @@ services:
     networks:
       - marketplace_network
 
+  frontend:
+    build: ./frontend
+    container_name: crypto_marketplace_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=https://debazaar.click/api
+    depends_on:
+      - web
+    networks:
+      - marketplace_network
+
   caddy:
     build:
       context: .
       dockerfile: Dockerfile.caddy
+    container_name: crypto_marketplace_caddy
     ports:
       - "80:80"
       - "443:443"
@@ -45,6 +60,7 @@ services:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     depends_on:
       - web
+      - frontend
     networks:
       - marketplace_network
 
@@ -56,3 +72,4 @@ volumes:
 networks:
   marketplace_network:
     driver: bridge
+

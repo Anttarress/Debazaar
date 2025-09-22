@@ -38,6 +38,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
 class CreateListingSerializer(serializers.ModelSerializer):
     seller_id = serializers.IntegerField(write_only=True)
+    image_url = serializers.CharField(required=True, allow_blank=False)
     
     class Meta:
         model = Listing
