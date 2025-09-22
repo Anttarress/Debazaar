@@ -36,6 +36,12 @@ class CategoryChoices(models.TextChoices):
     OTHER = 'other', _('Other Digital Products')
 
 
+class CurrencyChoices(models.TextChoices):
+    USDT = 'USDT', _('Tether USD')
+    USDC = 'USDC', _('USD Coin')
+    BTC = 'BTC', _('Bitcoin')
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     telegram_id = models.BigIntegerField(unique=True)
@@ -84,8 +90,8 @@ class Listing(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     title = models.CharField(max_length=200)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    currency = models.CharField(max_length=10, default='USDT')
+    price = models.DecimalField(max_digits=18, decimal_places=8, help_text="Price with up to 8 decimal places for precise crypto amounts")
+    currency = models.CharField(max_length=10, choices=CurrencyChoices.choices, default=CurrencyChoices.USDT)
     token_address = models.CharField(max_length=42)
     file_path = models.CharField(max_length=500, blank=True, null=True)
     metadata_cid = models.CharField(max_length=100, blank=True, null=True)
@@ -176,7 +182,7 @@ class Order(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='orders')
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sales')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=18, decimal_places=8, help_text="Order amount with up to 8 decimal places")
     token_address = models.CharField(max_length=42)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='created')
     escrow_tx_hash = models.CharField(max_length=66, blank=True, null=True)
