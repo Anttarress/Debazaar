@@ -8,10 +8,54 @@ function App() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [telegramUser, setTelegramUser] = useState(null);
 
     useEffect(() => {
+        // Initialize Telegram WebApp
+        if (window.Telegram?.WebApp) {
+            const tg = window.Telegram.WebApp;
+
+            // Expand the app to full height
+            tg.expand();
+
+            // Get user data from Telegram
+            if (tg.initDataUnsafe?.user) {
+                const user = tg.initDataUnsafe.user;
+                setTelegramUser(user);
+
+                // Authenticate with your backend
+                authenticateWithTelegram(user);
+            }
+
+            // Set theme colors
+            tg.setHeaderColor('#2563eb');
+            tg.setBackgroundColor('#ffffff');
+        }
+
         loadProducts();
     }, []);
+
+    const authenticateWithTelegram = async (user) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://debazaar.click/api'}/auth/telegram/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: user.id,
+                    username: user.username,
+                    first_name: user.first_name
+                })
+            });
+
+            if (response.ok) {
+                const authData = await response.json();
+                console.log('Authenticated:', authData);
+                // Store user session data if needed
+            }
+        } catch (err) {
+            console.error('Telegram auth failed:', err);
+        }
+    };
 
     const loadProducts = async () => {
         try {
@@ -27,7 +71,12 @@ function App() {
 
     const handleAddProduct = async (productData) => {
         try {
-            await api.createListing(productData);
+            // Add telegram user ID to the product data
+            const listingData = {
+                ...productData,
+                seller_id: telegramUser?.id || 1 // Use Telegram ID or fallback
+            };
+            await api.createListing(listingData);
             setShowAddForm(false);
             loadProducts(); // Refresh the product list
         } catch (err) {
@@ -39,7 +88,14 @@ function App() {
     return (
         <div className="app">
             <div className="header">
-                <h1>Crypto Marketplace</h1>
+                <div className="header-content">
+                    <h1>Crypto Marketplace</h1>
+                    {telegramUser && (
+                        <div className="user-info">
+                            Welcome, {telegramUser.first_name}!
+                        </div>
+                    )}
+                </div>
                 <button
                     className="add-product-btn"
                     onClick={() => setShowAddForm(true)}
