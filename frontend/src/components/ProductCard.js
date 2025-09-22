@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatPriceWithCurrency } from '../utils/priceFormatter';
 
 const ProductCard = ({ product, onWatchClick }) => {
     return (
@@ -10,7 +11,7 @@ const ProductCard = ({ product, onWatchClick }) => {
                 <h3 className="product-title">{product.title}</h3>
                 <p className="product-description">{product.description}</p>
                 <div className="product-details">
-                    <span className="product-price">${product.price} {product.currency}</span>
+                    <span className="product-price">{formatPriceWithCurrency(product.price, product.currency)}</span>
                     <span className="product-seller">by {product.seller.username}</span>
                 </div>
                 <div className="product-meta">

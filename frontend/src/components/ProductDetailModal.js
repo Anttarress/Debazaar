@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatPriceWithCurrency } from '../utils/priceFormatter';
 
 const ProductDetailModal = ({ product, onClose }) => {
     if (!product) return null;
@@ -24,7 +25,7 @@ const ProductDetailModal = ({ product, onClose }) => {
                             <h2 className="product-detail-title">{product.title}</h2>
 
                             <div className="product-detail-price">
-                                <span className="current-price">${product.price} {product.currency}</span>
+                                <span className="current-price">{formatPriceWithCurrency(product.price, product.currency)}</span>
                             </div>
 
                             <div className="product-detail-seller">
