@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ProductCard from './components/ProductCard';
 import AddProductForm from './components/AddProductForm';
 import ProductDetailModal from './components/ProductDetailModal';
@@ -11,6 +11,8 @@ function App() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [telegramUser, setTelegramUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchTimeout, setSearchTimeout] = useState(null);
 
     useEffect(() => {
         // Initialize Telegram WebApp
@@ -37,6 +39,15 @@ function App() {
         loadProducts();
     }, []);
 
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+        };
+    }, [searchTimeout]);
+
     const authenticateWithTelegram = async (user) => {
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://debazaar.click/api'}/auth/telegram/`, {
@@ -59,11 +70,11 @@ function App() {
         }
     };
 
-    const loadProducts = async () => {
+    const loadProducts = async (searchParams = {}) => {
         try {
             setLoading(true);
-            console.log('here in this f3 - HOT RELOAD TEST');
-            const data = await api.getListings();
+            console.log('Loading products with params:', searchParams);
+            const data = await api.getListings(searchParams);
             console.log('data: ', data);
             setProducts(data.listings || []);
         } catch (err) {
@@ -97,6 +108,36 @@ function App() {
         setSelectedProduct(null);
     };
 
+    // Debounced search function
+    const debouncedSearch = useCallback((query) => {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        const timeout = setTimeout(() => {
+            const searchParams = query.trim() ? { search: query } : {};
+            loadProducts(searchParams);
+        }, 300); // 300ms delay
+
+        setSearchTimeout(timeout);
+    }, [searchTimeout]);
+
+    // Handle search input change
+    const handleSearchChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        debouncedSearch(query);
+    };
+
+    // Handle search button click (optional - for immediate search)
+    const handleSearchClick = () => {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+        const searchParams = searchQuery.trim() ? { search: searchQuery } : {};
+        loadProducts(searchParams);
+    };
+
     return (
         <div className="app">
             <div className="header">
@@ -112,10 +153,17 @@ function App() {
                     <div className="search-container">
                         <input
                             type="text"
-                            placeholder="Searching"
+                            placeholder="Search products..."
                             className="search-input"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                         />
-                        <button className="search-btn">Search</button>
+                        <button
+                            className="search-btn"
+                            onClick={handleSearchClick}
+                        >
+                            Search
+                        </button>
                     </div>
                 </div>
                 <div className="header-right">

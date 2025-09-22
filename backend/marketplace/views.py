@@ -12,6 +12,7 @@ from .serializers import (
     OrderSerializer, CreateOrderSerializer, DisputeSerializer,
     TelegramAuthSerializer, DepositSerializer, UploadFileSerializer
 )
+from .filters import ListingFilter
 
 
 class TelegramAuthView(APIView):
@@ -47,17 +48,20 @@ class TelegramAuthView(APIView):
 
 class ListingsView(generics.ListCreateAPIView):
     """List all listings or create new listing"""
+    queryset = Listing.objects.filter(status='active')
+    serializer_class = ListingSerializer
+    filterset_class = ListingFilter
+    search_fields = ['title', 'description']
+    ordering_fields = ['price', 'created_at', 'title']
+    ordering = ['-created_at']
     
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateListingSerializer
         return ListingSerializer
     
-    def get_queryset(self):
-        return Listing.objects.filter(status='active').order_by('-created_at')
-    
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response({'listings': serializer.data})
 
