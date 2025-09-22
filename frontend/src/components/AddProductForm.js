@@ -9,6 +9,11 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         category: '',
         image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
+        delivery_method: '',
+        arbitration_method: '',
+        file_hash: '',
+        access_duration_days: 30,
+        requires_license_key: false,
         seller_id: 1 // Mock seller ID
     });
 
@@ -18,9 +23,10 @@ const AddProductForm = ({ onClose, onSubmit }) => {
     };
 
     const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: e.target.value
+            [name]: type === 'checkbox' ? checked : value
         }));
     };
 
@@ -68,18 +74,35 @@ const AddProductForm = ({ onClose, onSubmit }) => {
 
                     <select name="category" value={formData.category} onChange={handleChange} required>
                         <option value="">Select Category</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="clothing">Clothing & Fashion</option>
-                        <option value="home_garden">Home & Garden</option>
-                        <option value="sports">Sports & Outdoors</option>
-                        <option value="books">Books & Media</option>
-                        <option value="health">Health & Beauty</option>
-                        <option value="toys">Toys & Games</option>
-                        <option value="automotive">Automotive</option>
-                        <option value="art">Art & Collectibles</option>
-                        <option value="digital">Digital Products</option>
-                        <option value="services">Services</option>
-                        <option value="other">Other</option>
+                        <optgroup label="📚 Educational Content">
+                            <option value="online_courses">Online Courses & Training</option>
+                            <option value="ebooks_guides">E-books & Guides</option>
+                            <option value="research_reports">Research Reports & Playbooks</option>
+                            <option value="cheat_sheets">Cheat Sheets & Templates</option>
+                        </optgroup>
+                        <optgroup label="🎨 Creative Assets">
+                            <option value="graphic_design">Graphic Design Templates</option>
+                            <option value="website_themes">Website Themes & UI Kits</option>
+                            <option value="stock_media">Stock Photography & Illustrations</option>
+                            <option value="video_templates">Video Editing Templates</option>
+                        </optgroup>
+                        <optgroup label="💻 Software & Development">
+                            <option value="code_scripts">Scripts & Code Snippets</option>
+                            <option value="dev_tools">Developer Tools & Plugins</option>
+                            <option value="extensions">Browser Extensions & Add-ons</option>
+                        </optgroup>
+                        <optgroup label="📊 Business & Productivity">
+                            <option value="spreadsheets">Spreadsheets & Dashboards</option>
+                            <option value="business_templates">Business Templates & Documents</option>
+                            <option value="marketing_kits">Marketing Kits & Creatives</option>
+                            <option value="automation_workflows">Automation Workflows</option>
+                        </optgroup>
+                        <optgroup label="🛠️ Digital Services">
+                            <option value="consulting">Consulting & Advisory</option>
+                            <option value="custom_development">Custom Development</option>
+                            <option value="design_services">Design Services</option>
+                        </optgroup>
+                        <option value="other">Other Digital Products</option>
                     </select>
 
                     <input
@@ -90,6 +113,54 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         onChange={handleChange}
                         required
                     />
+
+                    <select name="delivery_method" value={formData.delivery_method} onChange={handleChange}>
+                        <option value="">Auto-select based on category</option>
+                        <option value="file_download">File Download</option>
+                        <option value="encrypted_link">Encrypted Download Link</option>
+                        <option value="streaming_access">Streaming Access</option>
+                        <option value="repository_access">Repository Access</option>
+                        <option value="email_delivery">Email Delivery</option>
+                        <option value="custom_delivery">Custom Delivery Method</option>
+                    </select>
+
+                    <select name="arbitration_method" value={formData.arbitration_method} onChange={handleChange}>
+                        <option value="">Auto-select based on category</option>
+                        <option value="file_hash_verification">File Hash Verification</option>
+                        <option value="content_audit">Content Audit</option>
+                        <option value="usage_verification">Usage Verification</option>
+                        <option value="expert_review">Expert Review</option>
+                        <option value="community_voting">Community Voting</option>
+                        <option value="automated_testing">Automated Testing</option>
+                    </select>
+
+                    <input
+                        type="text"
+                        name="file_hash"
+                        placeholder="File Hash (SHA-256) - Optional"
+                        value={formData.file_hash}
+                        onChange={handleChange}
+                    />
+
+                    <input
+                        type="number"
+                        name="access_duration_days"
+                        placeholder="Access Duration (days)"
+                        value={formData.access_duration_days}
+                        onChange={handleChange}
+                        min="1"
+                        max="365"
+                    />
+
+                    <label className="checkbox-label">
+                        <input
+                            type="checkbox"
+                            name="requires_license_key"
+                            checked={formData.requires_license_key}
+                            onChange={handleChange}
+                        />
+                        Requires License Key
+                    </label>
 
                     <div className="form-actions">
                         <button type="button" onClick={onClose} className="cancel-btn">

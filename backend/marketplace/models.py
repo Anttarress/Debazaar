@@ -4,18 +4,36 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CategoryChoices(models.TextChoices):
-    ELECTRONICS = 'electronics', _('Electronics')
-    CLOTHING = 'clothing', _('Clothing & Fashion')
-    HOME_GARDEN = 'home_garden', _('Home & Garden')
-    SPORTS = 'sports', _('Sports & Outdoors')
-    BOOKS = 'books', _('Books & Media')
-    HEALTH = 'health', _('Health & Beauty')
-    TOYS = 'toys', _('Toys & Games')
-    AUTOMOTIVE = 'automotive', _('Automotive')
-    ART = 'art', _('Art & Collectibles')
-    DIGITAL = 'digital', _('Digital Products')
-    SERVICES = 'services', _('Services')
-    OTHER = 'other', _('Other')
+    # Educational Content
+    ONLINE_COURSES = 'online_courses', _('Online Courses & Training')
+    EBOOKS_GUIDES = 'ebooks_guides', _('E-books & Guides')
+    RESEARCH_REPORTS = 'research_reports', _('Research Reports & Playbooks')
+    CHEAT_SHEETS = 'cheat_sheets', _('Cheat Sheets & Templates')
+    
+    # Creative Assets
+    GRAPHIC_DESIGN = 'graphic_design', _('Graphic Design Templates')
+    WEBSITE_THEMES = 'website_themes', _('Website Themes & UI Kits')
+    STOCK_MEDIA = 'stock_media', _('Stock Photography & Illustrations')
+    VIDEO_TEMPLATES = 'video_templates', _('Video Editing Templates')
+    
+    # Software & Development
+    CODE_SCRIPTS = 'code_scripts', _('Scripts & Code Snippets')
+    DEV_TOOLS = 'dev_tools', _('Developer Tools & Plugins')
+    EXTENSIONS = 'extensions', _('Browser Extensions & Add-ons')
+    
+    # Business & Productivity
+    SPREADSHEETS = 'spreadsheets', _('Spreadsheets & Dashboards')
+    BUSINESS_TEMPLATES = 'business_templates', _('Business Templates & Documents')
+    MARKETING_KITS = 'marketing_kits', _('Marketing Kits & Creatives')
+    AUTOMATION_WORKFLOWS = 'automation_workflows', _('Automation Workflows')
+    
+    # Digital Services
+    CONSULTING = 'consulting', _('Consulting & Advisory')
+    CUSTOM_DEVELOPMENT = 'custom_development', _('Custom Development')
+    DESIGN_SERVICES = 'design_services', _('Design Services')
+    
+    # Other
+    OTHER = 'other', _('Other Digital Products')
 
 
 class UserProfile(models.Model):
@@ -45,6 +63,24 @@ class Listing(models.Model):
         ('sold', 'Sold'),
     ]
     
+    DELIVERY_METHOD_CHOICES = [
+        ('file_download', 'File Download'),
+        ('encrypted_link', 'Encrypted Download Link'),
+        ('streaming_access', 'Streaming Access'),
+        ('repository_access', 'Repository Access'),
+        ('email_delivery', 'Email Delivery'),
+        ('custom_delivery', 'Custom Delivery Method'),
+    ]
+    
+    ARBITRATION_METHOD_CHOICES = [
+        ('file_hash_verification', 'File Hash Verification'),
+        ('content_audit', 'Content Audit'),
+        ('usage_verification', 'Usage Verification'),
+        ('expert_review', 'Expert Review'),
+        ('community_voting', 'Community Voting'),
+        ('automated_testing', 'Automated Testing'),
+    ]
+    
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -55,10 +91,71 @@ class Listing(models.Model):
     metadata_cid = models.CharField(max_length=100, blank=True, null=True)
     image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
-    category = models.CharField(max_length=20, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
+    category = models.CharField(max_length=30, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
+    delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHOD_CHOICES, default='file_download')
+    arbitration_method = models.CharField(max_length=25, choices=ARBITRATION_METHOD_CHOICES, default='file_hash_verification')
+    file_hash = models.CharField(max_length=64, blank=True, null=True, help_text="SHA-256 hash for file verification")
+    access_duration_days = models.IntegerField(default=30, help_text="Number of days buyer has access to content")
+    requires_license_key = models.BooleanField(default=False, help_text="Whether product requires license key activation")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_default_delivery_method(self):
+        """Get default delivery method based on category"""
+        category_delivery_map = {
+            CategoryChoices.ONLINE_COURSES: 'streaming_access',
+            CategoryChoices.EBOOKS_GUIDES: 'encrypted_link',
+            CategoryChoices.RESEARCH_REPORTS: 'encrypted_link',
+            CategoryChoices.CHEAT_SHEETS: 'file_download',
+            CategoryChoices.GRAPHIC_DESIGN: 'encrypted_link',
+            CategoryChoices.WEBSITE_THEMES: 'repository_access',
+            CategoryChoices.STOCK_MEDIA: 'encrypted_link',
+            CategoryChoices.VIDEO_TEMPLATES: 'encrypted_link',
+            CategoryChoices.CODE_SCRIPTS: 'repository_access',
+            CategoryChoices.DEV_TOOLS: 'repository_access',
+            CategoryChoices.EXTENSIONS: 'repository_access',
+            CategoryChoices.SPREADSHEETS: 'encrypted_link',
+            CategoryChoices.BUSINESS_TEMPLATES: 'encrypted_link',
+            CategoryChoices.MARKETING_KITS: 'encrypted_link',
+            CategoryChoices.AUTOMATION_WORKFLOWS: 'custom_delivery',
+            CategoryChoices.CONSULTING: 'custom_delivery',
+            CategoryChoices.CUSTOM_DEVELOPMENT: 'custom_delivery',
+            CategoryChoices.DESIGN_SERVICES: 'custom_delivery',
+        }
+        return category_delivery_map.get(self.category, 'file_download')
+    
+    def get_default_arbitration_method(self):
+        """Get default arbitration method based on category"""
+        category_arbitration_map = {
+            CategoryChoices.ONLINE_COURSES: 'usage_verification',
+            CategoryChoices.EBOOKS_GUIDES: 'file_hash_verification',
+            CategoryChoices.RESEARCH_REPORTS: 'content_audit',
+            CategoryChoices.CHEAT_SHEETS: 'file_hash_verification',
+            CategoryChoices.GRAPHIC_DESIGN: 'content_audit',
+            CategoryChoices.WEBSITE_THEMES: 'automated_testing',
+            CategoryChoices.STOCK_MEDIA: 'content_audit',
+            CategoryChoices.VIDEO_TEMPLATES: 'content_audit',
+            CategoryChoices.CODE_SCRIPTS: 'automated_testing',
+            CategoryChoices.DEV_TOOLS: 'automated_testing',
+            CategoryChoices.EXTENSIONS: 'automated_testing',
+            CategoryChoices.SPREADSHEETS: 'usage_verification',
+            CategoryChoices.BUSINESS_TEMPLATES: 'content_audit',
+            CategoryChoices.MARKETING_KITS: 'content_audit',
+            CategoryChoices.AUTOMATION_WORKFLOWS: 'expert_review',
+            CategoryChoices.CONSULTING: 'expert_review',
+            CategoryChoices.CUSTOM_DEVELOPMENT: 'expert_review',
+            CategoryChoices.DESIGN_SERVICES: 'expert_review',
+        }
+        return category_arbitration_map.get(self.category, 'file_hash_verification')
+    
+    def save(self, *args, **kwargs):
+        # Set default delivery and arbitration methods if not specified
+        if not self.delivery_method:
+            self.delivery_method = self.get_default_delivery_method()
+        if not self.arbitration_method:
+            self.arbitration_method = self.get_default_arbitration_method()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - ${self.price}"

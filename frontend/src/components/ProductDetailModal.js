@@ -22,7 +22,7 @@ const ProductDetailModal = ({ product, onClose }) => {
                     <div className="product-detail-right">
                         <div className="product-detail-info">
                             <h2 className="product-detail-title">{product.title}</h2>
-                            
+
                             <div className="product-detail-price">
                                 <span className="current-price">${product.price} {product.currency}</span>
                             </div>
@@ -36,8 +36,31 @@ const ProductDetailModal = ({ product, onClose }) => {
 
                             <div className="product-detail-category">
                                 <span className="category-label">Category:</span>
-                                <span className="category-value">{product.category}</span>
+                                <span className="category-value">{product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                             </div>
+
+                            <div className="product-detail-delivery">
+                                <span className="delivery-label">Delivery Method:</span>
+                                <span className="delivery-value">{product.delivery_method?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'File Download'}</span>
+                            </div>
+
+                            <div className="product-detail-arbitration">
+                                <span className="arbitration-label">Dispute Resolution:</span>
+                                <span className="arbitration-value">{product.arbitration_method?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'File Hash Verification'}</span>
+                            </div>
+
+                            {product.access_duration_days && (
+                                <div className="product-detail-access">
+                                    <span className="access-label">Access Duration:</span>
+                                    <span className="access-value">{product.access_duration_days} days</span>
+                                </div>
+                            )}
+
+                            {product.requires_license_key && (
+                                <div className="product-detail-license">
+                                    <span className="license-badge">🔑 License Key Required</span>
+                                </div>
+                            )}
 
                             <div className="product-detail-description">
                                 <h3>Description</h3>
