@@ -1,3 +1,5 @@
+/* eBay-Style Professional Marketplace CSS */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,246 +7,238 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-attachment: fixed;
-    color: var(--tg-theme-text-color, #333);
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    min-height: 100vh;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    line-height: 1.4;
+    font-size: 14px;
 }
 
 .app {
     min-height: 100vh;
+    background-color: #f7f7f7;
 }
 
-/* Header */
+/* eBay-Style Header */
 .header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 1.5rem 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 24px;
     position: sticky;
     top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-.header-content {
+.header-left {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 2px;
+    min-width: 120px;
 }
 
 .header h1 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 1.8rem;
+    font-size: 28px;
+    font-weight: bold;
+    color: #0064d2;
     margin: 0;
-    font-weight: 700;
     letter-spacing: -0.5px;
 }
 
 .user-info {
-    font-size: 0.9rem;
-    color: #666;
-    font-weight: 500;
+    font-size: 11px;
+    color: #767676;
+    font-weight: normal;
 }
 
-.add-product-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.header-center {
+    flex: 1;
+    max-width: 600px;
+}
+
+.search-container {
+    display: flex;
+    border: 2px solid #0064d2;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-btn {
+    background-color: #0064d2;
     color: white;
     border: none;
-    padding: 0.875rem 2rem;
-    border-radius: 50px;
+    padding: 10px 20px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    touch-action: manipulation;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    position: relative;
-    overflow: hidden;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
 }
 
-.add-product-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+.search-btn:hover {
+    background-color: #0053ba;
 }
 
-.add-product-btn:active {
-    transform: translateY(0);
+.header-right {
+    min-width: 80px;
 }
 
-/* Header */
-.app-header {
-    background: var(--tg-theme-secondary-bg-color, white);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    /* Telegram Mini App safe area */
-    padding-top: env(safe-area-inset-top, 1rem);
-}
-
-.app-header h1 {
-    color: #2563eb;
-    font-size: 1.5rem;
-}
-
-.add-btn {
-    background: var(--tg-theme-button-color, #2563eb);
-    color: var(--tg-theme-button-text-color, white);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+.sell-btn {
+    background-color: #ffffff;
+    color: #0064d2;
+    border: 1px solid #0064d2;
+    padding: 8px 16px;
+    border-radius: 4px;
     cursor: pointer;
-    font-weight: 500;
-    transition: background 0.2s;
-    touch-action: manipulation;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-.add-btn:hover {
-    background: #1d4ed8;
+.sell-btn:hover {
+    background-color: #f0f8ff;
+    border-color: #0053ba;
 }
 
-/* Main content */
-.app-main {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Products grid */
+/* Main Content Area */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 24px;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: #f7f7f7;
 }
 
-/* Product card */
+/* eBay-Style Product Cards */
 .product-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    cursor: pointer;
     position: relative;
-}
-
-.product-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-.product-card:hover::before {
-    opacity: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-color: #0064d2;
 }
 
 .product-image {
     width: 100%;
     height: 200px;
     object-fit: cover;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .product-info {
-    padding: 1.5rem;
+    padding: 16px;
 }
 
 .product-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: #1f2937;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0064d2;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-title:hover {
+    text-decoration: underline;
 }
 
 .product-description {
-    color: #6b7280;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    color: #767676;
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .product-details {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    align-items: center;
+    margin-bottom: 12px;
 }
 
 .product-price {
-    font-weight: 700;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 1.2rem;
+    font-size: 18px;
+    font-weight: bold;
+    color: #cc1414;
 }
 
 .product-seller {
-    color: #6b7280;
-    font-size: 0.9rem;
+    color: #767676;
+    font-size: 12px;
 }
 
 .product-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
 }
 
 .product-category {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    color: #667eea;
-    padding: 0.4rem 1rem;
-    border-radius: 25px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .product-rating {
-    color: #f59e0b;
+    color: #ff6900;
+    font-size: 12px;
     font-weight: 500;
 }
 
-/* Modal */
+/* eBay-Style Modal */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease;
 }
 
 @keyframes fadeIn {
@@ -258,21 +252,19 @@ body {
 }
 
 .modal-content {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
     width: 90%;
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     animation: slideUp 0.3s ease;
 }
 
 @keyframes slideUp {
     from {
-        transform: translateY(30px);
+        transform: translateY(20px);
         opacity: 0;
     }
 
@@ -286,177 +278,376 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f9f9f9;
 }
 
 .modal-header h2 {
-    color: #1f2937;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 24px;
     cursor: pointer;
-    color: #6b7280;
+    color: #767676;
     padding: 0;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
-/* Form */
+.close-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* eBay-Style Form */
 .product-form {
-    padding: 1.5rem;
+    padding: 24px;
 }
 
 .product-form input,
 .product-form textarea,
 .product-form select {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+    outline: none;
+    border-color: #0064d2;
+    box-shadow: 0 0 0 2px rgba(0, 100, 210, 0.1);
 }
 
 .product-form textarea {
     height: 100px;
     resize: vertical;
+    font-family: inherit;
+}
+
+.product-form select {
+    background-color: white;
+    cursor: pointer;
 }
 
 .form-actions {
     display: flex;
-    gap: 1rem;
+    gap: 12px;
     justify-content: flex-end;
-    margin-top: 1.5rem;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
 }
 
 .cancel-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #6b7280;
-    border: 2px solid #e5e7eb;
-    padding: 0.875rem 2rem;
-    border-radius: 50px;
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #cccccc;
+    padding: 10px 24px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 14px;
+    transition: all 0.2s ease;
 }
 
 .cancel-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: #d1d5db;
+    background-color: #f5f5f5;
+    border-color: #999999;
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #0064d2;
     color: white;
     border: none;
-    padding: 0.875rem 2rem;
-    border-radius: 50px;
+    padding: 10px 24px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-size: 14px;
+    transition: background-color 0.2s ease;
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    background-color: #0053ba;
 }
 
-/* Empty state */
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    grid-column: 1 / -1;
+.submit-btn:active {
+    background-color: #004494;
 }
 
-.empty-state h2 {
-    color: #6b7280;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    color: #9ca3af;
-    margin-bottom: 2rem;
-}
-
-/* Loading & Error */
+/* Loading State */
 .loading {
     text-align: center;
-    padding: 4rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.1rem;
-    font-weight: 500;
-    position: relative;
+    padding: 60px 20px;
+    color: #767676;
+    font-size: 16px;
+    background-color: #f7f7f7;
 }
 
 .loading::after {
     content: '';
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: 20px auto 0;
+    border: 3px solid #e5e5e5;
     border-radius: 50%;
-    border-top-color: rgba(255, 255, 255, 0.8);
+    border-top-color: #0064d2;
     animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
     to {
-        transform: translateX(-50%) rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    grid-column: 1 / -1;
+    background-color: #f7f7f7;
+}
+
+.empty-state h2 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.empty-state p {
+    color: #767676;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* Error Messages */
 .error-message {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #dc2626;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
+    background-color: #fff2f0;
+    border: 1px solid #ffccc7;
+    color: #cc1414;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 14px;
 }
 
 .error-message button {
-    background: #dc2626;
+    background-color: #cc1414;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .app-header {
-        padding: 1rem;
+    .header {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
     }
 
-    .app-header h1 {
-        font-size: 1.25rem;
+    .header-left,
+    .header-center,
+    .header-right {
+        width: 100%;
     }
 
-    .app-main {
-        padding: 1rem;
+    .header-left {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        min-width: auto;
+    }
+
+    .header-center {
+        max-width: none;
+        order: 3;
+    }
+
+    .header-right {
+        order: 2;
+        min-width: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .search-btn {
+        padding: 8px 16px;
+        font-size: 13px;
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .product-card {
+        border-radius: 6px;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .product-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .buy-now-btn,
+    .watch-btn {
+        padding: 10px 16px;
     }
 
     .modal-content {
         width: 95%;
-        margin: 1rem;
+        margin: 20px;
+        border-radius: 6px;
     }
+
+    .modal-header,
+    .product-form {
+        padding: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancel-btn,
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .add-product-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}
+
+/* eBay-Style Product Actions */
+.product-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.buy-now-btn {
+    flex: 1;
+    background-color: #0064d2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+}
+
+.buy-now-btn:hover {
+    background-color: #0053ba;
+}
+
+.watch-btn {
+    flex: 1;
+    background-color: white;
+    color: #333;
+    border: 1px solid #cccccc;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.watch-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #999999;
+}
+
+/* Additional eBay-inspired elements */
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #0064d2;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+}
+
+.product-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Professional focus states */
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+    border-color: #0064d2;
+}
+
+/* Subtle animations for professional feel */
+.product-card,
+.add-product-btn,
+.submit-btn,
+.cancel-btn {
+    transition: all 0.2s ease;
 }

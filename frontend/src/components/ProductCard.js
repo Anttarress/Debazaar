@@ -17,6 +17,10 @@ const ProductCard = ({ product }) => {
                     <span className="product-category">{product.category}</span>
                     <span className="product-rating">★ {product.seller_rating.toFixed(1)}</span>
                 </div>
+                <div className="product-actions">
+                    <button className="buy-now-btn">Buy It Now</button>
+                    <button className="watch-btn">Watch</button>
+                </div>
             </div>
         </div>
     );

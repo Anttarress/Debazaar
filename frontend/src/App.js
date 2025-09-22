@@ -88,20 +88,32 @@ function App() {
     return (
         <div className="app">
             <div className="header">
-                <div className="header-content">
-                    <h1>Crypto Marketplace</h1>
+                <div className="header-left">
+                    <h1>DBazaar</h1>
                     {telegramUser && (
                         <div className="user-info">
-                            Welcome, {telegramUser.first_name}!
+                            Hi {telegramUser.first_name}!
                         </div>
                     )}
                 </div>
-                <button
-                    className="add-product-btn"
-                    onClick={() => setShowAddForm(true)}
-                >
-                    + Add Product
-                </button>
+                <div className="header-center">
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Search for anything"
+                            className="search-input"
+                        />
+                        <button className="search-btn">Search</button>
+                    </div>
+                </div>
+                <div className="header-right">
+                    <button
+                        className="sell-btn"
+                        onClick={() => setShowAddForm(true)}
+                    >
+                        Sell
+                    </button>
+                </div>
             </div>
 
             {loading ? (
