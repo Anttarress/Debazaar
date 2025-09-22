@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onWatchClick }) => {
     return (
         <div className="product-card">
             {product.image_url && (
@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
                 </div>
                 <div className="product-actions">
                     <button className="buy-now-btn">Buy It Now</button>
-                    <button className="watch-btn">Watch</button>
+                    <button className="watch-btn" onClick={() => onWatchClick(product)}>Watch</button>
                 </div>
             </div>
         </div>

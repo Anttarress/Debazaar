@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './components/ProductCard';
 import AddProductForm from './components/AddProductForm';
+import ProductDetailModal from './components/ProductDetailModal';
 import { api } from './services/api';
 import './App.css';
 
@@ -8,6 +9,7 @@ function App() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [telegramUser, setTelegramUser] = useState(null);
 
     useEffect(() => {
@@ -85,6 +87,14 @@ function App() {
         }
     };
 
+    const handleWatchClick = (product) => {
+        setSelectedProduct(product);
+    };
+
+    const handleCloseProductDetail = () => {
+        setSelectedProduct(null);
+    };
+
     return (
         <div className="app">
             <div className="header">
@@ -121,7 +131,11 @@ function App() {
             ) : (
                 <div className="products-grid">
                     {products.map(product => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onWatchClick={handleWatchClick}
+                        />
                     ))}
                 </div>
             )}
@@ -130,6 +144,13 @@ function App() {
                 <AddProductForm
                     onClose={() => setShowAddForm(false)}
                     onSubmit={handleAddProduct}
+                />
+            )}
+
+            {selectedProduct && (
+                <ProductDetailModal
+                    product={selectedProduct}
+                    onClose={handleCloseProductDetail}
                 />
             )}
         </div>
