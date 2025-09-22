@@ -115,43 +115,55 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         required
                     />
 
-                    <select name="delivery_method" value={formData.delivery_method} onChange={handleChange}>
-                        <option value="">Auto-select based on category</option>
-                        <option value="file_download">File Download</option>
-                        <option value="encrypted_link">Encrypted Download Link</option>
-                        <option value="streaming_access">Streaming Access</option>
-                        <option value="repository_access">Repository Access</option>
-                        <option value="email_delivery">Email Delivery</option>
-                        <option value="custom_delivery">Custom Delivery Method</option>
-                    </select>
+                    <div className="form-field-group">
+                        <label className="form-label">Delivery Method</label>
+                        <select name="delivery_method" value={formData.delivery_method} onChange={handleChange}>
+                            <option value="">Auto-select based on category</option>
+                            <option value="file_download">File Download</option>
+                            <option value="encrypted_link">Encrypted Download Link</option>
+                            <option value="streaming_access">Streaming Access</option>
+                            <option value="repository_access">Repository Access</option>
+                            <option value="email_delivery">Email Delivery</option>
+                            <option value="custom_delivery">Custom Delivery Method</option>
+                        </select>
+                    </div>
 
-                    <select name="arbitration_method" value={formData.arbitration_method} onChange={handleChange}>
-                        <option value="">Auto-select based on category</option>
-                        <option value="file_hash_verification">File Hash Verification</option>
-                        <option value="content_audit">Content Audit</option>
-                        <option value="usage_verification">Usage Verification</option>
-                        <option value="expert_review">Expert Review</option>
-                        <option value="community_voting">Community Voting</option>
-                        <option value="automated_testing">Automated Testing</option>
-                    </select>
+                    <div className="form-field-group">
+                        <label className="form-label">Dispute Resolution Method</label>
+                        <select name="arbitration_method" value={formData.arbitration_method} onChange={handleChange}>
+                            <option value="">Auto-select based on category</option>
+                            <option value="file_hash_verification">File Hash Verification</option>
+                            <option value="content_audit">Content Audit</option>
+                            <option value="usage_verification">Usage Verification</option>
+                            <option value="expert_review">Expert Review</option>
+                            <option value="community_voting">Community Voting</option>
+                            <option value="automated_testing">Automated Testing</option>
+                        </select>
+                    </div>
 
-                    <input
-                        type="text"
-                        name="file_hash"
-                        placeholder="File Hash (SHA-256) - Optional"
-                        value={formData.file_hash}
-                        onChange={handleChange}
-                    />
+                    <div className="form-field-group">
+                        <label className="form-label">File Hash (SHA-256)</label>
+                        <input
+                            type="text"
+                            name="file_hash"
+                            placeholder="Enter SHA-256 hash for file verification"
+                            value={formData.file_hash}
+                            onChange={handleChange}
+                        />
+                    </div>
 
-                    <input
-                        type="number"
-                        name="access_duration_days"
-                        placeholder="Access Duration (days)"
-                        value={formData.access_duration_days}
-                        onChange={handleChange}
-                        min="1"
-                        max="365"
-                    />
+                    <div className="form-field-group">
+                        <label className="form-label">Access Duration</label>
+                        <input
+                            type="number"
+                            name="access_duration_days"
+                            placeholder="e.g., 30 (days buyer can access content)"
+                            value={formData.access_duration_days}
+                            onChange={handleChange}
+                            min="1"
+                            max="365"
+                        />
+                    </div>
 
                     <label className="checkbox-label">
                         <input
