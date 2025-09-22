@@ -75,6 +75,15 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         required
                     />
 
+                    <input
+                        type="url"
+                        name="image_url"
+                        placeholder="Image URL (required)"
+                        value={formData.image_url}
+                        onChange={handleChange}
+                        required
+                    />
+
                     <div className="form-actions">
                         <button type="button" onClick={onClose} className="cancel-btn">
                             Cancel
