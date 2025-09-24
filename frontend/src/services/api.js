@@ -19,6 +19,17 @@ export const api = {
         return response.json();
     },
 
+    // Get user's own products
+    getUserProducts: async (sellerId) => {
+        const url = new URL(`${API_BASE}/listings/`);
+        url.searchParams.append('seller', sellerId);
+
+        console.log('Fetching user products from:', url.toString());
+        const response = await fetch(url.toString());
+        if (!response.ok) throw new Error('Failed to fetch user products');
+        return response.json();
+    },
+
     createListing: async (listingData) => {
         const response = await fetch(`${API_BASE}/listings/`, {
             method: 'POST',

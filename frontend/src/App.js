@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ProductCard from './components/ProductCard';
 import AddProductForm from './components/AddProductForm';
 import ProductDetailModal from './components/ProductDetailModal';
+import MyProductsModal from './components/MyProductsModal';
 import { api } from './services/api';
 import './App.css';
 
@@ -11,8 +12,10 @@ function App() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [telegramUser, setTelegramUser] = useState(null);
+    const [authUser, setAuthUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchTimeout, setSearchTimeout] = useState(null);
+    const [showMyProducts, setShowMyProducts] = useState(false);
 
     useEffect(() => {
         // Initialize Telegram WebApp
@@ -23,12 +26,22 @@ function App() {
             tg.expand();
 
             // Get user data from Telegram
-            if (tg.initDataUnsafe?.user) {
-                const user = tg.initDataUnsafe.user;
-                setTelegramUser(user);
+            if (tg.initData) {
+                try {
+                    // Parse initData to get user information
+                    const params = new URLSearchParams(tg.initData);
+                    const userString = params.get('user');
 
-                // Authenticate with your backend
-                authenticateWithTelegram(user);
+                    if (userString) {
+                        const user = JSON.parse(userString);
+                        setTelegramUser(user);
+
+                        // Authenticate with your backend
+                        authenticateWithTelegram(user);
+                    }
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                }
             }
 
             // Set theme colors
@@ -50,7 +63,8 @@ function App() {
 
     const authenticateWithTelegram = async (user) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://debazaar.click/api'}/auth/telegram/`, {
+            const apiUrl = process.env.REACT_APP_API_URL || 'https://debazaar.click/api';
+            const response = await fetch(`${apiUrl}/auth/telegram/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -63,10 +77,18 @@ function App() {
             if (response.ok) {
                 const authData = await response.json();
                 console.log('Authenticated:', authData);
-                // Store user session data if needed
+                console.log('Django User ID:', authData.user_id);
+                console.log('Telegram ID:', user.id);
+                // Store user session data
+                setAuthUser(authData);
+
+            } else {
+                const errorText = await response.text();
+                alert(`Authentication failed!\nStatus: ${response.status}\nError: ${errorText}`);
             }
         } catch (err) {
             console.error('Telegram auth failed:', err);
+            alert(`Authentication error: ${err.message}`);
         }
     };
 
@@ -86,12 +108,19 @@ function App() {
 
     const handleAddProduct = async (productData) => {
         try {
-            // Add telegram user ID to the product data
+            // Add user ID to the product data
+            const sellerId = authUser?.user_id || telegramUser?.id || 1;
+            console.log('Creating product with seller_id:', sellerId);
+            console.log('authUser:', authUser);
+            console.log('telegramUser:', telegramUser);
+
             const listingData = {
                 ...productData,
-                seller_id: telegramUser?.id || 1 // Use Telegram ID or fallback
+                seller_id: sellerId
             };
             await api.createListing(listingData);
+
+
             setShowAddForm(false);
             loadProducts(); // Refresh the product list
         } catch (err) {
@@ -168,6 +197,12 @@ function App() {
                 </div>
                 <div className="header-right">
                     <button
+                        className="my-products-btn"
+                        onClick={() => setShowMyProducts(true)}
+                    >
+                        My Products
+                    </button>
+                    <button
                         className="sell-btn"
                         onClick={() => setShowAddForm(true)}
                     >
@@ -201,6 +236,15 @@ function App() {
                 <ProductDetailModal
                     product={selectedProduct}
                     onClose={handleCloseProductDetail}
+                />
+            )}
+
+            {showMyProducts && (
+                <MyProductsModal
+                    onClose={() => setShowMyProducts(false)}
+                    telegramUser={telegramUser}
+                    authUser={authUser}
+                    onProductClick={handleWatchClick}
                 />
             )}
         </div>
