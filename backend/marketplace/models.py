@@ -68,13 +68,9 @@ class Listing(models.Model):
         ('sold', 'Sold'),
     ]
     
-    DELIVERY_METHOD_CHOICES = [
-        ('file_download', 'File Download'),
-        ('encrypted_link', 'Encrypted Download Link'),
-        ('streaming_access', 'Streaming Access'),
-        ('repository_access', 'Repository Access'),
-        ('email_delivery', 'Email Delivery'),
-        ('custom_delivery', 'Custom Delivery Method'),
+    PAYMENT_METHOD_CHOICES = [
+        ('escrow', 'Using escrow'),
+        ('direct', 'Direct'),
     ]
     
     ARBITRATION_METHOD_CHOICES = [
@@ -97,7 +93,7 @@ class Listing(models.Model):
     image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=30, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
-    delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHOD_CHOICES, default='file_download')
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='escrow')
     arbitration_method = models.CharField(max_length=25, choices=ARBITRATION_METHOD_CHOICES, default='file_hash_verification')
     file_hash = models.CharField(max_length=64, blank=True, null=True, help_text="SHA-256 hash for file verification")
     access_duration_days = models.IntegerField(default=30, help_text="Number of days buyer has access to content")
@@ -107,29 +103,6 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def get_default_delivery_method(self):
-        """Get default delivery method based on category"""
-        category_delivery_map = {
-            CategoryChoices.ONLINE_COURSES: 'streaming_access',
-            CategoryChoices.EBOOKS_GUIDES: 'encrypted_link',
-            CategoryChoices.RESEARCH_REPORTS: 'encrypted_link',
-            CategoryChoices.CHEAT_SHEETS: 'file_download',
-            CategoryChoices.GRAPHIC_DESIGN: 'encrypted_link',
-            CategoryChoices.WEBSITE_THEMES: 'repository_access',
-            CategoryChoices.STOCK_MEDIA: 'encrypted_link',
-            CategoryChoices.VIDEO_TEMPLATES: 'encrypted_link',
-            CategoryChoices.CODE_SCRIPTS: 'repository_access',
-            CategoryChoices.DEV_TOOLS: 'repository_access',
-            CategoryChoices.EXTENSIONS: 'repository_access',
-            CategoryChoices.SPREADSHEETS: 'encrypted_link',
-            CategoryChoices.BUSINESS_TEMPLATES: 'encrypted_link',
-            CategoryChoices.MARKETING_KITS: 'encrypted_link',
-            CategoryChoices.AUTOMATION_WORKFLOWS: 'custom_delivery',
-            CategoryChoices.CONSULTING: 'custom_delivery',
-            CategoryChoices.CUSTOM_DEVELOPMENT: 'custom_delivery',
-            CategoryChoices.DESIGN_SERVICES: 'custom_delivery',
-        }
-        return category_delivery_map.get(self.category, 'file_download')
     
     def get_default_arbitration_method(self):
         """Get default arbitration method based on category"""
@@ -156,9 +129,7 @@ class Listing(models.Model):
         return category_arbitration_map.get(self.category, 'file_hash_verification')
     
     def save(self, *args, **kwargs):
-        # Set default delivery and arbitration methods if not specified
-        if not self.delivery_method:
-            self.delivery_method = self.get_default_delivery_method()
+        # Set default arbitration method if not specified
         if not self.arbitration_method:
             self.arbitration_method = self.get_default_arbitration_method()
         super().save(*args, **kwargs)

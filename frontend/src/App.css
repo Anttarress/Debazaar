@@ -666,8 +666,8 @@ body {
     transform: scaleX(1);
 }
 
-/* Product delivery info styling */
-.product-delivery-info {
+/* Product payment info styling */
+.product-payment-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -676,7 +676,7 @@ body {
     border-top: 1px solid #f0f0f0;
 }
 
-.delivery-method {
+.payment-method {
     font-size: 11px;
     color: #6c757d;
     font-weight: 500;

@@ -18,8 +18,8 @@ const ProductCard = ({ product, onWatchClick }) => {
                     <span className="product-category">{product.category ? product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Other'}</span>
                     <span className="product-rating">★ {product.seller_rating ? product.seller_rating.toFixed(1) : '0.0'}</span>
                 </div>
-                <div className="product-delivery-info">
-                    <span className="delivery-method">📦 {product.delivery_method?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'File Download'}</span>
+                <div className="product-payment-info">
+                    <span className="payment-method">💳 {product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
                     {product.requires_license_key && <span className="license-badge">🔑 License Required</span>}
                 </div>
                 <div className="product-actions">

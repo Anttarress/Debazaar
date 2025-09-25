@@ -40,9 +40,9 @@ const ProductDetailModal = ({ product, onClose }) => {
                                 <span className="category-value">{product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                             </div>
 
-                            <div className="product-detail-delivery">
-                                <span className="delivery-label">Delivery Method:</span>
-                                <span className="delivery-value">{product.delivery_method?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'File Download'}</span>
+                            <div className="product-detail-payment">
+                                <span className="payment-label">Payment Method:</span>
+                                <span className="payment-value">{product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
                             </div>
 
                             <div className="product-detail-arbitration">

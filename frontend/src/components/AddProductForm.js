@@ -9,7 +9,7 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         category: '',
         image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
-        delivery_method: '',
+        payment_method: 'escrow',
         arbitration_method: '',
         file_hash: '',
         access_duration_days: 30,
@@ -115,15 +115,10 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                     />
 
                     <div className="form-field-group">
-                        <label className="form-label">Delivery Method</label>
-                        <select name="delivery_method" value={formData.delivery_method} onChange={handleChange}>
-                            <option value="">Auto-select based on category</option>
-                            <option value="file_download">File Download</option>
-                            <option value="encrypted_link">Encrypted Download Link</option>
-                            <option value="streaming_access">Streaming Access</option>
-                            <option value="repository_access">Repository Access</option>
-                            <option value="email_delivery">Email Delivery</option>
-                            <option value="custom_delivery">Custom Delivery Method</option>
+                        <label className="form-label">Payment Method</label>
+                        <select name="payment_method" value={formData.payment_method} onChange={handleChange}>
+                            <option value="escrow">Using escrow</option>
+                            <option value="direct">Direct</option>
                         </select>
                     </div>
 
