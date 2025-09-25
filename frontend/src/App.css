@@ -892,6 +892,30 @@ body {
     text-transform: uppercase;
 }
 
+.product-detail-payment {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.payment-label {
+    font-size: 14px;
+    color: #767676;
+    font-weight: 500;
+}
+
+.payment-value {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
 .product-detail-description h3 {
     font-size: 16px;
     font-weight: 600;

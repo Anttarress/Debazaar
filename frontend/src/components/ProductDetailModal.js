@@ -40,9 +40,18 @@ const ProductDetailModal = ({ product, onClose }) => {
                                 <span className="category-value">{product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
                             </div>
 
-                            <div className="product-detail-payment">
-                                <span className="payment-label">Payment Method:</span>
-                                <span className="payment-value">{product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
+                            <div className="product-detail-payment" style={{ display: 'flex', gap: '8px', marginBottom: '20px', alignItems: 'center' }}>
+                                <span className="payment-label" style={{ fontSize: '14px', color: '#767676', fontWeight: '500' }}>Payment Method:</span>
+                                <span className="payment-value" style={{
+                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                    color: '#ffffff',
+                                    padding: '6px 12px',
+                                    borderRadius: '12px',
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    textTransform: 'uppercase',
+                                    boxShadow: '0 2px 4px rgba(40, 167, 69, 0.2)'
+                                }}>{product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
                             </div>
 
                             <div className="product-detail-arbitration">
