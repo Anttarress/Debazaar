@@ -38,5 +38,19 @@ export const api = {
         });
         if (!response.ok) throw new Error('Failed to create listing');
         return response.json();
+    },
+
+    // Delete a listing (soft delete)
+    deleteListing: async (listingId, sellerId) => {
+        const response = await fetch(`${API_BASE}/listings/${listingId}/delete/`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seller_id: sellerId })
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete listing');
+        }
+        return response.json();
     }
 };

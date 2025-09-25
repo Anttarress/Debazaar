@@ -48,7 +48,7 @@ class TelegramAuthView(APIView):
 
 class ListingsView(generics.ListCreateAPIView):
     """List all listings or create new listing"""
-    queryset = Listing.objects.filter(status='active')
+    queryset = Listing.objects.filter(status='active', is_deleted=False)
     serializer_class = ListingSerializer
     filterset_class = ListingFilter
     search_fields = ['title', 'description']
@@ -68,8 +68,36 @@ class ListingsView(generics.ListCreateAPIView):
 
 class ListingDetailView(generics.RetrieveAPIView):
     """Get single listing details"""
-    queryset = Listing.objects.all()
+    queryset = Listing.objects.filter(is_deleted=False)
     serializer_class = ListingSerializer
+
+
+class DeleteListingView(APIView):
+    """Soft delete a listing (set is_deleted=True)"""
+    
+    def delete(self, request, listing_id):
+        try:
+            listing = get_object_or_404(Listing, id=listing_id, is_deleted=False)
+            
+            # Check if the user is the owner of the listing
+            if request.data.get('seller_id') != listing.seller.id:
+                return Response({
+                    'error': 'You can only delete your own listings'
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            # Soft delete the listing
+            listing.is_deleted = True
+            listing.save()
+            
+            return Response({
+                'success': True,
+                'message': 'Listing deleted successfully'
+            }, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            return Response({
+                'error': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateOrderView(generics.CreateAPIView):

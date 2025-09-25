@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
+import MyProductCard from './MyProductCard';
 import { api } from '../services/api';
 import './MyProductsModal.css';
 
@@ -55,13 +55,28 @@ const MyProductsModal = ({ onClose, telegramUser, authUser, onProductClick }) =>
         </div>
     );
 
+    const handleDeleteProduct = async (productId) => {
+        try {
+            const sellerId = authUser?.user_id || telegramUser?.id;
+            await api.deleteListing(productId, sellerId);
+
+            // Remove the deleted product from the local state
+            setUserProducts(prev => prev.filter(product => product.id !== productId));
+
+            alert('Product deleted successfully!');
+        } catch (error) {
+            throw error; // Re-throw so MyProductCard can handle it
+        }
+    };
+
     const renderProductsList = () => (
         <div className="my-products-grid">
             {userProducts.map(product => (
-                <ProductCard
+                <MyProductCard
                     key={product.id}
                     product={product}
                     onWatchClick={onProductClick}
+                    onDelete={handleDeleteProduct}
                 />
             ))}
         </div>

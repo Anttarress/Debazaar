@@ -8,6 +8,7 @@ urlpatterns = [
     # Listings
     path('listings/', views.ListingsView.as_view(), name='listings'),
     path('listings/<int:pk>/', views.ListingDetailView.as_view(), name='listing_detail'),
+    path('listings/<int:listing_id>/delete/', views.DeleteListingView.as_view(), name='delete_listing'),
     
     # Orders
     path('orders/', views.CreateOrderView.as_view(), name='create_order'),
