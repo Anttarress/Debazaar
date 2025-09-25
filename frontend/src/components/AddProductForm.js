@@ -59,7 +59,7 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                     <input
                         type="number"
                         name="price"
-                        placeholder="Price (e.g., 0.001 for BTC, 1.50 for USDT)"
+                        placeholder="Price (e.g., 1.50 for USDT/USDC)"
                         value={formData.price}
                         onChange={handleChange}
                         step="0.00000001"
@@ -70,7 +70,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                     <select name="currency" value={formData.currency} onChange={handleChange}>
                         <option value="USDT">USDT (Tether USD)</option>
                         <option value="USDC">USDC (USD Coin)</option>
-                        <option value="BTC">BTC (Bitcoin)</option>
                     </select>
 
                     <select name="category" value={formData.category} onChange={handleChange} required>

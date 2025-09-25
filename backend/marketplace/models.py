@@ -39,7 +39,6 @@ class CategoryChoices(models.TextChoices):
 class CurrencyChoices(models.TextChoices):
     USDT = 'USDT', _('Tether USD')
     USDC = 'USDC', _('USD Coin')
-    BTC = 'BTC', _('Bitcoin')
 
 
 class UserProfile(models.Model):
