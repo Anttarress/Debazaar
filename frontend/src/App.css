@@ -693,6 +693,17 @@ body {
     letter-spacing: 0.3px;
 }
 
+.expired-badge {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
 /* Professional focus states */
 .product-form input:focus,
 .product-form textarea:focus,

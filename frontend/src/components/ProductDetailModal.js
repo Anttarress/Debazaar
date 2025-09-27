@@ -51,10 +51,10 @@ const ProductDetailModal = ({ product, onClose }) => {
                             </div>
 
 
-                            {product.access_duration_days && (
+                            {product.listing_duration_days && (
                                 <div className="product-detail-access">
-                                    <span className="access-label">Access Duration:</span>
-                                    <span className="access-value">{product.access_duration_days} days</span>
+                                    <span className="access-label">Listing Duration:</span>
+                                    <span className="access-value">{product.listing_duration_days} days</span>
                                 </div>
                             )}
 

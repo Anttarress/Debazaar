@@ -9,7 +9,7 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
         payment_method: 'escrow',
-        access_duration_days: 30,
+        listing_duration_days: 30,
         requires_license_key: false,
         seller_id: 1 // Mock seller ID
     });
@@ -250,12 +250,12 @@ const AddProductForm = ({ onClose, onSubmit }) => {
 
 
                     <div className="form-field-group">
-                        <label className="form-label">Access Duration</label>
+                        <label className="form-label">Listing Duration</label>
                         <input
                             type="number"
-                            name="access_duration_days"
-                            placeholder="e.g., 30 (days buyer can access content)"
-                            value={formData.access_duration_days}
+                            name="listing_duration_days"
+                            placeholder="e.g., 30 (days the listing will be active)"
+                            value={formData.listing_duration_days}
                             onChange={handleChange}
                             min="1"
                             max="365"

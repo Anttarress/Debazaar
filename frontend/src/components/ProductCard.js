@@ -20,6 +20,7 @@ const ProductCard = ({ product, onWatchClick }) => {
                 <div className="product-payment-info">
                     <span className="payment-method">💳 {product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
                     {product.requires_license_key && <span className="license-badge">🔑 License Required</span>}
+                    {product.is_expired && <span className="expired-badge">⏰ Expired</span>}
                 </div>
                 <div className="product-actions">
                     <button className="buy-now-btn">Buy It Now</button>
