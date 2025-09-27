@@ -10,7 +10,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         token_address: '0x0000000000000000000000000000000000000000',
         payment_method: 'escrow',
         listing_duration_days: 30,
-        requires_license_key: false,
         seller_id: 1 // Mock seller ID
     });
 
@@ -262,15 +261,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         />
                     </div>
 
-                    <label className="checkbox-label">
-                        <input
-                            type="checkbox"
-                            name="requires_license_key"
-                            checked={formData.requires_license_key}
-                            onChange={handleChange}
-                        />
-                        Requires License Key
-                    </label>
 
                     <div className="form-actions">
                         <button type="button" onClick={onClose} className="cancel-btn">

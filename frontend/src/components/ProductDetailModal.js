@@ -58,11 +58,6 @@ const ProductDetailModal = ({ product, onClose }) => {
                                 </div>
                             )}
 
-                            {product.requires_license_key && (
-                                <div className="product-detail-license">
-                                    <span className="license-badge">🔑 License Key Required</span>
-                                </div>
-                            )}
 
                             <div className="product-detail-description">
                                 <h3>Description</h3>

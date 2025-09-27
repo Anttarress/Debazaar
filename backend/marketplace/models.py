@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.files.storage import default_storage
+from django.utils import timezone
+from datetime import timedelta
 
 
 
@@ -55,14 +57,26 @@ class Listing(models.Model):
     image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='escrow')
-    access_duration_days = models.IntegerField(default=30, help_text="Number of days buyer has access to content")
-    requires_license_key = models.BooleanField(default=False, help_text="Whether product requires license key activation")
+    listing_duration_days = models.IntegerField(default=30, help_text="Number of days the listing will be active")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     is_deleted = models.BooleanField(default=False, help_text="Soft delete flag")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def is_expired(self):
+        """Check if the listing has expired based on listing_duration_days"""
+        if not self.listing_duration_days:
+            return False
+        expiration_date = self.created_at + timedelta(days=self.listing_duration_days)
+        return timezone.now() > expiration_date
     
+    @property
+    def expires_at(self):
+        """Get the expiration date of the listing"""
+        if not self.listing_duration_days:
+            return None
+        return self.created_at + timedelta(days=self.listing_duration_days)
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

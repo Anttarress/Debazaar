@@ -21,14 +21,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class ListingSerializer(serializers.ModelSerializer):
     seller = UserSerializer(read_only=True)
     seller_rating = serializers.SerializerMethodField()
+    is_expired = serializers.ReadOnlyField()
+    expires_at = serializers.ReadOnlyField()
     
     class Meta:
         model = Listing
         fields = ['id', 'seller', 'title', 'description', 'price', 'currency', 
                  'token_address', 'file_path', 'metadata_cid', 'image_url', 
                  'image_cid', 'payment_method',
-                 'access_duration_days', 'requires_license_key',
-                 'status', 'seller_rating', 'created_at', 'updated_at']
+                 'listing_duration_days',
+                 'status', 'seller_rating', 'is_expired', 'expires_at', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
     
     def get_seller_rating(self, obj):
@@ -47,7 +49,7 @@ class CreateListingSerializer(serializers.ModelSerializer):
         fields = ['seller_id', 'title', 'description', 'price', 'currency', 
                  'token_address', 'file_path', 'metadata_cid', 'image_url', 
                  'image_cid', 'payment_method',
-                 'access_duration_days', 'requires_license_key', 'status']
+                 'listing_duration_days', 'status']
     
     def create(self, validated_data):
         seller_id = validated_data.pop('seller_id')

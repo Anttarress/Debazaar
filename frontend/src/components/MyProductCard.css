@@ -109,13 +109,6 @@
     border-radius: 8px;
 }
 
-.my-product-card .license-badge {
-    font-size: 11px;
-    color: #0064d2;
-    background-color: #e6f3ff;
-    padding: 4px 8px;
-    border-radius: 8px;
-}
 
 .my-product-card .product-actions {
     display: flex;
