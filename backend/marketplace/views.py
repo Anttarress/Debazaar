@@ -4,9 +4,10 @@ from rest_framework import generics, status, mixins
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
 import hashlib
 import base64
-from .models import UserProfile, Listing, Order, Dispute, MockSmartContract
+from .models import UserProfile, Listing, Order, Dispute, MockSmartContract, UploadedFile
 from .serializers import (
     UserProfileSerializer, ListingSerializer, CreateListingSerializer,
     OrderSerializer, CreateOrderSerializer, DisputeSerializer,
@@ -222,6 +223,7 @@ class UploadFileView(APIView):
             
             return Response({
                 'data_url': data_url,
+                'url': data_url,  # For compatibility
                 'filename': file.name,
                 'size': len(file_content)
             }, status=status.HTTP_200_OK)

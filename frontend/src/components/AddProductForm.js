@@ -15,9 +15,42 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         seller_id: 1 // Mock seller ID
     });
 
-    const handleSubmit = (e) => {
+    const [imageMethod, setImageMethod] = useState('url'); // 'url' or 'upload'
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(formData);
+        console.log('Form submitted with method:', imageMethod);
+        console.log('Selected file:', selectedFile);
+        console.log('Current formData.image_url:', formData.image_url);
+
+        let finalFormData = formData;
+
+        // For upload method, ensure file is uploaded before submitting
+        if (imageMethod === 'upload' && selectedFile && !formData.image_url) {
+            console.log('Need to upload file before submission');
+            const uploadResult = await handleFileUpload();
+            if (!uploadResult) {
+                console.log('Upload failed, stopping submission');
+                alert('Please wait for the image to upload before submitting.');
+                return;
+            }
+            // Use the uploaded image URL directly
+            finalFormData = { ...formData, image_url: uploadResult };
+            console.log('Upload successful, finalFormData:', finalFormData);
+        }
+
+        // Validate that we have an image URL
+        if (!finalFormData.image_url) {
+            console.log('No image URL found, validation failed');
+            alert('Please provide an image URL or upload an image.');
+            return;
+        }
+
+        console.log('Submitting form with data:', finalFormData);
+        onSubmit(finalFormData);
     };
 
     const handleChange = (e) => {
@@ -26,6 +59,74 @@ const AddProductForm = ({ onClose, onSubmit }) => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+    };
+
+    const handleImageMethodChange = (method) => {
+        setImageMethod(method);
+        setSelectedFile(null);
+        setPreviewUrl('');
+        setFormData(prev => ({ ...prev, image_url: '' }));
+    };
+
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => setPreviewUrl(e.target.result);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleFileUpload = async () => {
+        if (!selectedFile) {
+            console.log('No file selected');
+            return null;
+        }
+
+        console.log('Starting upload for file:', selectedFile.name);
+        setIsUploading(true);
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', selectedFile);
+
+        try {
+            console.log('Making request to http://localhost:8000/api/upload/');
+            const response = await fetch('http://localhost:8000/api/upload/', {
+                method: 'POST',
+                body: formDataUpload,
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Upload successful, result:', result);
+                // New API returns 'url' instead of 'data_url'
+                const imageUrl = result.url || result.data_url;
+                setFormData(prev => ({ ...prev, image_url: imageUrl }));
+                setPreviewUrl(imageUrl);
+                return imageUrl;
+            } else {
+                const errorText = await response.text();
+                console.error('Upload failed with status:', response.status, 'Error:', errorText);
+                alert(`Upload failed: ${response.status} - ${errorText}`);
+                return null;
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert(`Upload failed: ${error.message}`);
+            return null;
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleImageUrlChange = (e) => {
+        const url = e.target.value;
+        setFormData(prev => ({ ...prev, image_url: url }));
+        setPreviewUrl(url);
     };
 
     return (
@@ -103,14 +204,74 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         <option value="other">Other Digital Products</option>
                     </select>
 
-                    <input
-                        type="url"
-                        name="image_url"
-                        placeholder="Image URL (required)"
-                        value={formData.image_url}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="form-field-group">
+                        <label className="form-label">Product Image</label>
+                        <div className="image-method-toggle">
+                            <label className="radio-label">
+                                <input
+                                    type="radio"
+                                    name="imageMethod"
+                                    value="url"
+                                    checked={imageMethod === 'url'}
+                                    onChange={() => handleImageMethodChange('url')}
+                                />
+                                Image URL
+                            </label>
+                            <label className="radio-label">
+                                <input
+                                    type="radio"
+                                    name="imageMethod"
+                                    value="upload"
+                                    checked={imageMethod === 'upload'}
+                                    onChange={() => handleImageMethodChange('upload')}
+                                />
+                                Upload Image
+                            </label>
+                        </div>
+
+                        {imageMethod === 'url' ? (
+                            <input
+                                type="url"
+                                name="image_url"
+                                placeholder="Image URL (required)"
+                                value={formData.image_url}
+                                onChange={handleImageUrlChange}
+                                required
+                            />
+                        ) : (
+                            <div className="file-upload-section">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileSelect}
+                                    id="imageUpload"
+                                    style={{ display: 'none' }}
+                                />
+                                <label htmlFor="imageUpload" className="file-upload-btn">
+                                    Choose Image File
+                                </label>
+                                {selectedFile && (
+                                    <div className="file-info">
+                                        <span>{selectedFile.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={handleFileUpload}
+                                            disabled={isUploading}
+                                            className="upload-btn"
+                                        >
+                                            {isUploading ? 'Uploading...' : 'Upload'}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {previewUrl && (
+                            <div className="image-preview">
+                                <img src={previewUrl} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} />
+                            </div>
+                        )}
+                    </div>
 
                     <div className="form-field-group">
                         <label className="form-label">Payment Method</label>

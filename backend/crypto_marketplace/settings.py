@@ -40,6 +40,25 @@ CORS_ALLOWED_ORIGINS = [
     "https://debazaar.click",
 ]
 
+# Additional CORS settings for file uploads
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_EXPOSE_HEADERS = [
+    'content-disposition',
+    'content-length',
+    'content-type',
+]
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

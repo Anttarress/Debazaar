@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.core.files.storage import default_storage
 
 
 class CategoryChoices(models.TextChoices):
@@ -160,6 +161,26 @@ class Dispute(models.Model):
 
 
 # Mock Smart Contract Functions (placeholders)
+class UploadedFile(models.Model):
+    """Model for storing uploaded files with metadata"""
+    file = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    file_size = models.PositiveIntegerField(null=True, blank=True)
+    content_type = models.CharField(max_length=100, blank=True)
+    
+    class Meta:
+        ordering = ['-uploaded_at']
+    
+    def __str__(self):
+        return f"{self.file.name} ({self.uploaded_at})"
+    
+    def save(self, *args, **kwargs):
+        if self.file:
+            self.file_size = self.file.size
+            self.content_type = self.file.content_type
+        super().save(*args, **kwargs)
+
+
 class MockSmartContract:
     @staticmethod
     def create_escrow(order_id, seller_address, token_address, amount, deadline):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Listing, Order, Dispute
+from .models import UserProfile, Listing, Order, Dispute, UploadedFile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -137,6 +137,8 @@ class DepositSerializer(serializers.Serializer):
     buyer_address = serializers.CharField(max_length=42)
 
 
-class UploadFileSerializer(serializers.Serializer):
-    file = serializers.ImageField()
+class UploadFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadedFile
+        fields = ['file']
     

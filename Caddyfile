@@ -10,6 +10,6 @@ debazaar.click {
     }
 
     handle {
-        reverse_proxy 172.17.0.1:3000
+        reverse_proxy 172.18.0.1:3000
     }
 }
