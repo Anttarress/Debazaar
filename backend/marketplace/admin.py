@@ -12,7 +12,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
     list_display = ['title', 'seller', 'price', 'currency', 'status', 'created_at']
-    list_filter = ['status', 'category', 'created_at']
+    list_filter = ['status', 'created_at']
     search_fields = ['title', 'seller__username', 'description']
 
 

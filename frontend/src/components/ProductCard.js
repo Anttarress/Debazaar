@@ -15,7 +15,6 @@ const ProductCard = ({ product, onWatchClick }) => {
                     <span className="product-seller">by {product.seller.username}</span>
                 </div>
                 <div className="product-meta">
-                    <span className="product-category">{product.category ? product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Other'}</span>
                     <span className="product-rating">★ {product.seller_rating ? product.seller_rating.toFixed(1) : '0.0'}</span>
                 </div>
                 <div className="product-payment-info">

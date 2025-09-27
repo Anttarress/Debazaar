@@ -1,10 +1,8 @@
 import django_filters
-from .models import Listing, CategoryChoices, CurrencyChoices
+from .models import Listing, CurrencyChoices
 
 
 class ListingFilter(django_filters.FilterSet):
-    # Category filtering
-    category = django_filters.ChoiceFilter(choices=CategoryChoices.choices)
     
     # Price range filtering
     min_price = django_filters.NumberFilter(field_name='price', lookup_expr='gte')
@@ -23,4 +21,4 @@ class ListingFilter(django_filters.FilterSet):
     
     class Meta:
         model = Listing
-        fields = ['category', 'currency', 'status']
+        fields = ['currency', 'status']

@@ -6,7 +6,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         description: '',
         price: '',
         currency: 'USDT',
-        category: '',
         image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
         payment_method: 'escrow',
@@ -171,38 +170,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         <option value="USDC">USDC (USD Coin)</option>
                     </select>
 
-                    <select name="category" value={formData.category} onChange={handleChange} required>
-                        <option value="">Select Category</option>
-                        <optgroup label="📚 Educational Content">
-                            <option value="online_courses">Online Courses & Training</option>
-                            <option value="ebooks_guides">E-books & Guides</option>
-                            <option value="research_reports">Research Reports & Playbooks</option>
-                            <option value="cheat_sheets">Cheat Sheets & Templates</option>
-                        </optgroup>
-                        <optgroup label="🎨 Creative Assets">
-                            <option value="graphic_design">Graphic Design Templates</option>
-                            <option value="website_themes">Website Themes & UI Kits</option>
-                            <option value="stock_media">Stock Photography & Illustrations</option>
-                            <option value="video_templates">Video Editing Templates</option>
-                        </optgroup>
-                        <optgroup label="💻 Software & Development">
-                            <option value="code_scripts">Scripts & Code Snippets</option>
-                            <option value="dev_tools">Developer Tools & Plugins</option>
-                            <option value="extensions">Browser Extensions & Add-ons</option>
-                        </optgroup>
-                        <optgroup label="📊 Business & Productivity">
-                            <option value="spreadsheets">Spreadsheets & Dashboards</option>
-                            <option value="business_templates">Business Templates & Documents</option>
-                            <option value="marketing_kits">Marketing Kits & Creatives</option>
-                            <option value="automation_workflows">Automation Workflows</option>
-                        </optgroup>
-                        <optgroup label="🛠️ Digital Services">
-                            <option value="consulting">Consulting & Advisory</option>
-                            <option value="custom_development">Custom Development</option>
-                            <option value="design_services">Design Services</option>
-                        </optgroup>
-                        <option value="other">Other Digital Products</option>
-                    </select>
 
                     <div className="form-field-group">
                         <label className="form-label">Product Image</label>

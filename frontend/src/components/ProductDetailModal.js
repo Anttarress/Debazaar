@@ -35,10 +35,6 @@ const ProductDetailModal = ({ product, onClose }) => {
                                 </div>
                             </div>
 
-                            <div className="product-detail-category">
-                                <span className="category-label">Category:</span>
-                                <span className="category-value">{product.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
-                            </div>
 
                             <div className="product-detail-payment" style={{ display: 'flex', gap: '8px', marginBottom: '20px', alignItems: 'center' }}>
                                 <span className="payment-label" style={{ fontSize: '14px', color: '#767676', fontWeight: '500' }}>Payment Method:</span>

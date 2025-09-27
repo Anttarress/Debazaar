@@ -4,37 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.files.storage import default_storage
 
 
-class CategoryChoices(models.TextChoices):
-    # Educational Content
-    ONLINE_COURSES = 'online_courses', _('Online Courses & Training')
-    EBOOKS_GUIDES = 'ebooks_guides', _('E-books & Guides')
-    RESEARCH_REPORTS = 'research_reports', _('Research Reports & Playbooks')
-    CHEAT_SHEETS = 'cheat_sheets', _('Cheat Sheets & Templates')
-    
-    # Creative Assets
-    GRAPHIC_DESIGN = 'graphic_design', _('Graphic Design Templates')
-    WEBSITE_THEMES = 'website_themes', _('Website Themes & UI Kits')
-    STOCK_MEDIA = 'stock_media', _('Stock Photography & Illustrations')
-    VIDEO_TEMPLATES = 'video_templates', _('Video Editing Templates')
-    
-    # Software & Development
-    CODE_SCRIPTS = 'code_scripts', _('Scripts & Code Snippets')
-    DEV_TOOLS = 'dev_tools', _('Developer Tools & Plugins')
-    EXTENSIONS = 'extensions', _('Browser Extensions & Add-ons')
-    
-    # Business & Productivity
-    SPREADSHEETS = 'spreadsheets', _('Spreadsheets & Dashboards')
-    BUSINESS_TEMPLATES = 'business_templates', _('Business Templates & Documents')
-    MARKETING_KITS = 'marketing_kits', _('Marketing Kits & Creatives')
-    AUTOMATION_WORKFLOWS = 'automation_workflows', _('Automation Workflows')
-    
-    # Digital Services
-    CONSULTING = 'consulting', _('Consulting & Advisory')
-    CUSTOM_DEVELOPMENT = 'custom_development', _('Custom Development')
-    DESIGN_SERVICES = 'design_services', _('Design Services')
-    
-    # Other
-    OTHER = 'other', _('Other Digital Products')
 
 
 class CurrencyChoices(models.TextChoices):
@@ -85,7 +54,6 @@ class Listing(models.Model):
     metadata_cid = models.CharField(max_length=100, blank=True, null=True)
     image_url = models.TextField(default='')
     image_cid = models.CharField(max_length=100, blank=True, null=True)
-    category = models.CharField(max_length=30, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='escrow')
     access_duration_days = models.IntegerField(default=30, help_text="Number of days buyer has access to content")
     requires_license_key = models.BooleanField(default=False, help_text="Whether product requires license key activation")
