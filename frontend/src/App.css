@@ -930,8 +930,6 @@ body {
 }
 
 /* New professional styling for additional product details */
-.product-detail-delivery,
-.product-detail-arbitration,
 .product-detail-access {
     display: flex;
     gap: 12px;
@@ -943,8 +941,6 @@ body {
     border-left: 4px solid #0064d2;
 }
 
-.delivery-label,
-.arbitration-label,
 .access-label {
     font-size: 13px;
     color: #495057;
@@ -954,8 +950,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-.delivery-value,
-.arbitration-value,
 .access-value {
     background-color: #ffffff;
     color: #333;

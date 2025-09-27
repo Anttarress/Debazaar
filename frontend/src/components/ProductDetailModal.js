@@ -54,10 +54,6 @@ const ProductDetailModal = ({ product, onClose }) => {
                                 }}>{product.payment_method === 'escrow' ? 'Using escrow' : 'Direct'}</span>
                             </div>
 
-                            <div className="product-detail-arbitration">
-                                <span className="arbitration-label">Dispute Resolution:</span>
-                                <span className="arbitration-value">{product.arbitration_method?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'File Hash Verification'}</span>
-                            </div>
 
                             {product.access_duration_days && (
                                 <div className="product-detail-access">
@@ -80,8 +76,6 @@ const ProductDetailModal = ({ product, onClose }) => {
 
                         <div className="product-detail-actions">
                             <button className="buy-button-large">Buy It Now</button>
-                            <button className="add-to-cart-button">Add to Cart</button>
-                            <button className="watch-button-large">Add to Watchlist</button>
                         </div>
                     </div>
                 </div>

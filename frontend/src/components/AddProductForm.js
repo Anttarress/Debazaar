@@ -10,8 +10,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         image_url: '',
         token_address: '0x0000000000000000000000000000000000000000',
         payment_method: 'escrow',
-        arbitration_method: '',
-        file_hash: '',
         access_duration_days: 30,
         requires_license_key: false,
         seller_id: 1 // Mock seller ID
@@ -122,29 +120,6 @@ const AddProductForm = ({ onClose, onSubmit }) => {
                         </select>
                     </div>
 
-                    <div className="form-field-group">
-                        <label className="form-label">Dispute Resolution Method</label>
-                        <select name="arbitration_method" value={formData.arbitration_method} onChange={handleChange}>
-                            <option value="">Auto-select based on category</option>
-                            <option value="file_hash_verification">File Hash Verification</option>
-                            <option value="content_audit">Content Audit</option>
-                            <option value="usage_verification">Usage Verification</option>
-                            <option value="expert_review">Expert Review</option>
-                            <option value="community_voting">Community Voting</option>
-                            <option value="automated_testing">Automated Testing</option>
-                        </select>
-                    </div>
-
-                    <div className="form-field-group">
-                        <label className="form-label">File Hash (SHA-256)</label>
-                        <input
-                            type="text"
-                            name="file_hash"
-                            placeholder="Enter SHA-256 hash for file verification"
-                            value={formData.file_hash}
-                            onChange={handleChange}
-                        />
-                    </div>
 
                     <div className="form-field-group">
                         <label className="form-label">Access Duration</label>

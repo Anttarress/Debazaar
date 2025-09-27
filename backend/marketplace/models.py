@@ -73,14 +73,6 @@ class Listing(models.Model):
         ('direct', 'Direct'),
     ]
     
-    ARBITRATION_METHOD_CHOICES = [
-        ('file_hash_verification', 'File Hash Verification'),
-        ('content_audit', 'Content Audit'),
-        ('usage_verification', 'Usage Verification'),
-        ('expert_review', 'Expert Review'),
-        ('community_voting', 'Community Voting'),
-        ('automated_testing', 'Automated Testing'),
-    ]
     
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     title = models.CharField(max_length=200)
@@ -94,8 +86,6 @@ class Listing(models.Model):
     image_cid = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=30, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='escrow')
-    arbitration_method = models.CharField(max_length=25, choices=ARBITRATION_METHOD_CHOICES, default='file_hash_verification')
-    file_hash = models.CharField(max_length=64, blank=True, null=True, help_text="SHA-256 hash for file verification")
     access_duration_days = models.IntegerField(default=30, help_text="Number of days buyer has access to content")
     requires_license_key = models.BooleanField(default=False, help_text="Whether product requires license key activation")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
@@ -104,34 +94,8 @@ class Listing(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     
-    def get_default_arbitration_method(self):
-        """Get default arbitration method based on category"""
-        category_arbitration_map = {
-            CategoryChoices.ONLINE_COURSES: 'usage_verification',
-            CategoryChoices.EBOOKS_GUIDES: 'file_hash_verification',
-            CategoryChoices.RESEARCH_REPORTS: 'content_audit',
-            CategoryChoices.CHEAT_SHEETS: 'file_hash_verification',
-            CategoryChoices.GRAPHIC_DESIGN: 'content_audit',
-            CategoryChoices.WEBSITE_THEMES: 'automated_testing',
-            CategoryChoices.STOCK_MEDIA: 'content_audit',
-            CategoryChoices.VIDEO_TEMPLATES: 'content_audit',
-            CategoryChoices.CODE_SCRIPTS: 'automated_testing',
-            CategoryChoices.DEV_TOOLS: 'automated_testing',
-            CategoryChoices.EXTENSIONS: 'automated_testing',
-            CategoryChoices.SPREADSHEETS: 'usage_verification',
-            CategoryChoices.BUSINESS_TEMPLATES: 'content_audit',
-            CategoryChoices.MARKETING_KITS: 'content_audit',
-            CategoryChoices.AUTOMATION_WORKFLOWS: 'expert_review',
-            CategoryChoices.CONSULTING: 'expert_review',
-            CategoryChoices.CUSTOM_DEVELOPMENT: 'expert_review',
-            CategoryChoices.DESIGN_SERVICES: 'expert_review',
-        }
-        return category_arbitration_map.get(self.category, 'file_hash_verification')
     
     def save(self, *args, **kwargs):
-        # Set default arbitration method if not specified
-        if not self.arbitration_method:
-            self.arbitration_method = self.get_default_arbitration_method()
         super().save(*args, **kwargs)
 
     def __str__(self):
