@@ -26,6 +26,8 @@ services:
       - DEBUG=1
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - SECRET_KEY=${SECRET_KEY}
+      - PRIVY_APP_ID=${PRIVY_APP_ID}
+      - PRIVY_APP_SECRET=${PRIVY_APP_SECRET}
     networks:
       - marketplace_network
 
@@ -43,6 +45,18 @@ services:
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    depends_on:
+      - web
+    networks:
+      - marketplace_network
+
+  frontend:
+    build: ./frontend
+    container_name: crypto_marketplace_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=https://debazaar.click/api
     depends_on:
       - web
     networks:

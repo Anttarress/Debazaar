@@ -17,6 +17,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     telegram_id = models.BigIntegerField(unique=True)
     wallet_address = models.CharField(max_length=42, blank=True, null=True)
+    privy_user_id = models.CharField(max_length=128, blank=True, null=True, db_index=True)
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     total_ratings = models.IntegerField(default=0)
     dispute_count = models.IntegerField(default=0)

@@ -14,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ['user', 'telegram_id', 'wallet_address', 'rating', 'total_ratings', 
+        fields = ['user', 'telegram_id', 'privy_user_id', 'wallet_address', 'rating', 'total_ratings', 
                  'dispute_count', 'total_orders', 'dispute_rate', 'created_at']
 
 
@@ -133,6 +133,10 @@ class TelegramAuthSerializer(serializers.Serializer):
     telegram_id = serializers.IntegerField()
     username = serializers.CharField(required=False)
     first_name = serializers.CharField(required=False)
+
+
+class PrivyAuthLinkSerializer(serializers.Serializer):
+    telegram_id = serializers.IntegerField(required=False)
 
 
 class DepositSerializer(serializers.Serializer):

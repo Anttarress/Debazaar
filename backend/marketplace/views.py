@@ -11,7 +11,8 @@ from .models import UserProfile, Listing, Order, Dispute, MockSmartContract, Upl
 from .serializers import (
     UserProfileSerializer, ListingSerializer, CreateListingSerializer,
     OrderSerializer, CreateOrderSerializer, DisputeSerializer,
-    TelegramAuthSerializer, DepositSerializer, UploadFileSerializer
+    TelegramAuthSerializer, DepositSerializer, UploadFileSerializer,
+    PrivyAuthLinkSerializer
 )
 from .filters import ListingFilter
 
@@ -45,6 +46,77 @@ class TelegramAuthView(APIView):
             }, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PrivyAuthView(APIView):
+    """Verify Privy ID token, upsert user, and link privy_user_id to telegram_id."""
+
+    def post(self, request):
+        # Expect Authorization: Bearer <idToken> and optional telegram_id in body
+        auth_header = request.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            return Response({'detail': 'Missing Bearer token'}, status=status.HTTP_401_UNAUTHORIZED)
+        id_token = auth_header.split(' ', 1)[1].strip()
+
+        # Verify JWT via Privy JWKS
+        try:
+            import requests
+            from jose import jwt
+        except Exception:
+            return Response({'detail': 'Server missing JWT dependencies'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        PRIVY_ISS = "https://auth.privy.io"
+        PRIVY_AUD = 'cmg42qhmu00voju0dwcn90l35'
+        try:
+            jwks = requests.get(f"{PRIVY_ISS}/.well-known/jwks.json", timeout=5).json()
+            claims = jwt.decode(
+                id_token,
+                jwks,
+                algorithms=['RS256', 'ES256'],
+                audience=PRIVY_AUD,
+                issuer=PRIVY_ISS,
+                options={'verify_aud': True, 'verify_iss': True}
+            )
+        except Exception as e:
+            return Response({'detail': f'Invalid token: {str(e)}'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        privy_user_id = claims.get('sub')
+        email = claims.get('email')
+        phone = claims.get('phone_number')
+
+        serializer = PrivyAuthLinkSerializer(data=request.data)
+        serializer.is_valid(raise_exception=False)
+        telegram_id = serializer.validated_data.get('telegram_id') if serializer.validated_data else None
+
+        if telegram_id:
+            user, _ = User.objects.get_or_create(
+                username=f'user_{telegram_id}'
+            )
+            profile, _ = UserProfile.objects.get_or_create(
+                user=user,
+                defaults={'telegram_id': telegram_id}
+            )
+            if profile.telegram_id != telegram_id:
+                profile.telegram_id = telegram_id
+        else:
+            base_username = email or phone or privy_user_id
+            user, _ = User.objects.get_or_create(
+                username=str(base_username)
+            )
+            profile, _ = UserProfile.objects.get_or_create(
+                user=user,
+                defaults={'telegram_id': 0}
+            )
+
+        profile.privy_user_id = privy_user_id
+        profile.save()
+
+        return Response({
+            'success': True,
+            'user_id': user.id,
+            'privy_user_id': privy_user_id,
+            'telegram_id': profile.telegram_id,
+        }, status=status.HTTP_200_OK)
 
 
 class ListingsView(generics.ListCreateAPIView):

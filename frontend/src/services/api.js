@@ -1,5 +1,5 @@
 
-const API_BASE = 'https://debazaar.click/api';
+const API_BASE = 'https://api.debazaar.click/api';
 
 export const api = {
     // Get all listings with optional search and filter parameters

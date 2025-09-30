@@ -5,6 +5,7 @@ import ProductDetailModal from './components/ProductDetailModal';
 import MyProductsModal from './components/MyProductsModal';
 import { api } from './services/api';
 import './App.css';
+import { usePrivy } from '@privy-io/react-auth';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ function App() {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchTimeout, setSearchTimeout] = useState(null);
     const [showMyProducts, setShowMyProducts] = useState(false);
+    const { login, authenticated, getIdToken } = usePrivy();
 
     useEffect(() => {
         // Initialize Telegram WebApp
@@ -103,6 +105,35 @@ function App() {
             console.error('Error loading products:', err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handlePrivyLogin = async () => {
+        try {
+            await login();
+            // Defer fetching ID token until after auth completes (prevents errors during OAuth redirect)
+            setTimeout(async () => {
+                try {
+                    if (!authenticated) {
+                        return; // wait for auth state; user will click again if needed
+                    }
+                    const idToken = await getIdToken();
+                    const apiUrl = 'https://api.debazaar.click/api';
+                    const tgId = window?.Telegram?.WebApp?.initDataUnsafe?.user?.id || telegramUser?.id;
+                    await fetch(`${apiUrl}/auth/privy/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify({ telegram_id: tgId })
+                    });
+                } catch (innerErr) {
+                    console.error('Fetching Privy ID token failed:', innerErr);
+                }
+            }, 0);
+        } catch (err) {
+            console.error('Privy login failed:', err);
         }
     };
 
@@ -196,6 +227,14 @@ function App() {
                     </div>
                 </div>
                 <div className="header-right">
+                    {!authenticated && (
+                        <button
+                            className="login-btn"
+                            onClick={handlePrivyLogin}
+                        >
+                            Login
+                        </button>
+                    )}
                     <button
                         className="my-products-btn"
                         onClick={() => setShowMyProducts(true)}

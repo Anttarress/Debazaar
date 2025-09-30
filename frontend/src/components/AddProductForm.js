@@ -89,8 +89,7 @@ const AddProductForm = ({ onClose, onSubmit }) => {
         formDataUpload.append('file', selectedFile);
 
         try {
-            console.log('Making request to http://localhost:8000/api/upload/');
-            const response = await fetch('http://localhost:8000/api/upload/', {
+            const response = await fetch('https://api.debazaar.click/api/upload/', {
                 method: 'POST',
                 body: formDataUpload,
             });

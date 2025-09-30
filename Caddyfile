@@ -1,15 +1,15 @@
 
-debazaar.click {
+debazaar.click api.debazaar.click {
     tls {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
     }
 
-    @api path /api/*
+    @api host api.debazaar.click
     handle @api {
-        reverse_proxy escrew-telegram-mvp-web-1:8000
+        reverse_proxy web:8000
     }
 
     handle {
-        reverse_proxy 172.18.0.1:3000
+        reverse_proxy frontend:80
     }
 }
