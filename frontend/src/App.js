@@ -65,7 +65,7 @@ function App() {
 
     const authenticateWithTelegram = async (user) => {
         try {
-            const apiUrl = process.env.REACT_APP_API_URL || 'https://debazaar.click/api';
+            const apiUrl = process.env.REACT_APP_API_URL || 'https://api.debazaar.click/api';
             const response = await fetch(`${apiUrl}/auth/telegram/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -118,7 +118,7 @@ function App() {
                         return; // wait for auth state; user will click again if needed
                     }
                     const idToken = await getIdToken();
-                    const apiUrl = 'https://api.debazaar.click/api';
+                    const apiUrl = process.env.REACT_APP_API_URL || 'https://api.debazaar.click/api';
                     const tgId = window?.Telegram?.WebApp?.initDataUnsafe?.user?.id || telegramUser?.id;
                     await fetch(`${apiUrl}/auth/privy/`, {
                         method: 'POST',

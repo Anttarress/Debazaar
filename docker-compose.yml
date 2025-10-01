@@ -51,12 +51,19 @@ services:
       - marketplace_network
 
   frontend:
-    build: ./frontend
     container_name: crypto_marketplace_frontend
     ports:
       - "3000:80"
     environment:
-      - REACT_APP_API_URL=https://debazaar.click/api
+      - REACT_APP_API_URL=https://api.debazaar.click/api
+      - REACT_APP_PRIVY_APP_ID=${REACT_APP_PRIVY_APP_ID}
+      - REACT_APP_PRIVY_CLIENT_ID=${REACT_APP_PRIVY_CLIENT_ID}
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: https://api.debazaar.click/api
+        REACT_APP_PRIVY_APP_ID: ${REACT_APP_PRIVY_APP_ID}
+        REACT_APP_PRIVY_CLIENT_ID: ${REACT_APP_PRIVY_CLIENT_ID}
     depends_on:
       - web
     networks:
