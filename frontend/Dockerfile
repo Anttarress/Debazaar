@@ -6,9 +6,12 @@ WORKDIR /app
 RUN apk add --no-cache yarn
 
 COPY package.json yarn.lock ./
-ENV YARN_CACHE_FOLDER=/tmp/.yarn-cache
-RUN yarn install --frozen-lockfile --no-optional --network-timeout 600000 \
-  && yarn cache clean
+
+# Use BuildKit cache mount for faster rebuilds
+# This caches yarn dependencies between builds
+RUN --mount=type=cache,target=/root/.yarn \
+    YARN_CACHE_FOLDER=/root/.yarn yarn install --frozen-lockfile --no-optional --network-timeout 600000 \
+    && yarn cache clean
 
 COPY . .
 
